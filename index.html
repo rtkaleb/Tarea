@@ -2,38 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Personajazos de Harry Potter</title>
+  <title>Películas de Studio Ghibli</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Personajes de Harry Potter</h1>
-  <div class="characters" id="characters"></div>
+  <h1>Películas de Studio Ghibli</h1>
+  <div id="movies" class="movies-container"></div>
 
   <script>
-    async function fetchCharacters() {
+    async function fetchMovies() {
       try {
-        const res = await fetch('https://hp-api.onrender.com/api/characters');
-        const data = await res.json();
-        const container = document.getElementById('characters');
+        const res = await fetch('https://ghibliapi.vercel.app/films');
+        const movies = await res.json();
+        const container = document.getElementById('movies');
 
-        const first20 = data.slice(0, 20); // Solo los primeros 20
-
-        first20.forEach(character => {
+        movies.forEach(movie => {
           const card = document.createElement('div');
-          card.className = 'card';
+          card.className = 'movie-card';
           card.innerHTML = `
-            <img src="${character.image || 'https://via.placeholder.com/200x250?text=No+Image'}" alt="${character.name}">
-            <h3>${character.name}</h3>
-            <p>${character.house || 'Sin casa'}</p>
+            <img src="${movie.image}" alt="Portada de ${movie.title}">
+            <div class="info">
+              <h2>${movie.title}</h2>
+              <p><strong>Año:</strong> ${movie.release_date}</p>
+              <p>${movie.description.slice(0, 200)}...</p>
+            </div>
           `;
           container.appendChild(card);
         });
       } catch (err) {
-        console.error('Error al cargar los personajes:', err);
+        console.error('Error al cargar películas:', err);
       }
     }
 
-    fetchCharacters();
+    fetchMovies();
   </script>
 </body>
 </html>
