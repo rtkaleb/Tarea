@@ -1,13 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Personajazos de Harry Potter</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-    sss
-    
+  <h1>Personajes de Harry Potter</h1>
+  <div class="characters" id="characters"></div>
+
+  <script>
+    async function fetchCharacters() {
+      try {
+        const res = await fetch('https://hp-api.onrender.com/api/characters');
+        const data = await res.json();
+        const container = document.getElementById('characters');
+
+        const first20 = data.slice(0, 20); // Solo los primeros 20
+
+        first20.forEach(character => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${character.image || 'https://via.placeholder.com/200x250?text=No+Image'}" alt="${character.name}">
+            <h3>${character.name}</h3>
+            <p>${character.house || 'Sin casa'}</p>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Error al cargar los personajes:', err);
+      }
+    }
+
+    fetchCharacters();
+  </script>
 </body>
 </html>
